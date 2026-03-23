@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<empbx:configuration xmlns:empbx="http://org.akstel.empbx#1.0">
+    <core-settings>
+        <param name="instance-id" value="test"/>
+    </core-settings>
+
+
+    <mgmt-service enabled="false">
+    </mgmt-service>
+
+    <sip-service>
+        <users>
+            <user id="1001" sip-password="secret" group="default"/>
+            <user id="1002" sip-password="" group="default"/>
+            <user id="1003" sip-password="" group="default"/>
+        </users>
+
+        <gateways>
+    	    <!--
+            <gateway name="pstn">
+                <param name="username" value="pstn"/>
+                <param name="password" value="secret123"/>
+                <param name="transport" value="udp"/>
+                <param name="domain" value="10.1.2.3"/>
+            </gateway>
+	    -->
+        </gateways>
+
+        <dialplan>
+            <rule name="pstn-in" dst-number="1019" app="bridge" data="user/1001" />
+            <rule name="pstn-out" dst-number="^(1234567)$" app="bridge" data="gateway/pstn/$1" />
+            <rule name="intercom" dst-number="/^(10[01][0-9])$/" app="bridge" data="user/$1" />
+        </dialplan>
+
+        <settings>
+            <param name="x_server_ident" value="empbx/1.x"/>
+            <param name="x_sip_debug" value="false"/>
+
+            <param name="sip_listen" value="0.0.0.0:5060"/>
+            <!-- <param name="sip_certificate" value="cert.pem"/> -->
+            <param name="sip_cafile" value="/etc/ssl/cert.pem"/>
+            <!--
+            #<param name="sip_transports" value="udp,tcp,tls,ws,wss"/>
+            #<param name="sip_trans_def" value="udp"/>
+            #<param name="sip_verify_server" value="yes"/> -->
+            <param name="sip_tos" value="160"/>
+            <!-- call -->
+            <param name="call_local_timeout" value="120"/>
+            <param name="call_max_calls" value="100"/>
+            <param name="call_hold_other_calls" value="yes"/>
+            <!-- audio -->
+            <param name="audio_player" value="aubridge,nil"/>
+            <param name="audio_source" value="aubridge,nil"/>
+            <param name="module" value="aubridge.so"/>
+            <param name="module" value="g711.so"/>
+            <!-- <param name="module" value="l16.so"/> -->
+            <!-- video -->
+            <!--
+            #<param name="video_source" value="v4l2,/dev/video0"/>
+            #<param name="video_display" value="x11,nil"/>
+            <param name="video_size" value="640x480"/>
+            <param name="video_bitrate" value="1000000"/>
+            <param name="video_fps" value="30.00"/>
+            <param name="video_fullscreen" value="no"/>
+            <param name="videnc_format" value="yuv420p"/>
+            -->
+            <!-- Audio/Video Transport -->
+            <!--
+            <param name="rtp_tos" value="184"/>
+            <param name="rtp_video_tos" value="136"/>
+            <param name="audio_jitter_buffer_type" value="fixed"/>
+            <param name="audio_jitter_buffer_delay" value="5-10"/>
+            <param name="video_jitter_buffer_type" value="fixed"/>
+            <param name="video_jitter_buffer_delay" value="5-50"/>
+            <param name="rtp_stats" value="no"/>
+            -->
+            <!--
+            #<param name="rtp_ports" value="10000-20000"/>
+            #<param name="rtp_bandwidth" value="512-1024"/>
+            #<param name="rtp_timeout" value="60"/>
+            #<param name="avt_bundle" value="no"/>
+            -->
+            <!-- Network -->
+            <!--
+            #<param name="dns_server" value="1.1.1.1:53"/>
+            #<param name="dns_server" value="1.0.0.1:53"/>
+            #<param name="dns_fallback" value="8.8.8.8:53"/>
+            #<param name="dns_getaddrinfo" value="no"/>
+            #<param name="net_interface" value="eth0"/>
+            -->
+        </settings>
+    </sip-service>
+
+</empbx:configuration>
