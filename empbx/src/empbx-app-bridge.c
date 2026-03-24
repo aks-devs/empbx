@@ -10,11 +10,9 @@ static void session_handler_dtmf(call_t *call, char key, void *arg) {
     call_t *call2 = (sess->lega == call ? sess->legb : sess->lega);
 
     if((key >= '0' && key <= '9') || (key >= 'A' && key <= 'F') || key == '*' || key == '#') {
-        if(sess->type == EMPBX_SESS_INTERCOM || (sess->type == EMPBX_SESS_INBOUND && call == sess->legb) || (sess->type == EMPBX_SESS_OUTBOUND && call == sess->lega)) {
-            char digits[2] = {key, 0x0};
-            if(!empbx_queue_is_full(sess->dtmfq)) {
-                empbx_queue_push(sess->dtmfq, empbx_strndup(digits, 2));
-            }
+        char digits[2] = {key, 0x0};
+        if(!empbx_queue_is_full(sess->dtmfq)) {
+            empbx_queue_push(sess->dtmfq, empbx_strndup(digits, 2));
         }
     }
 }
