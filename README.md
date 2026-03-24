@@ -2,7 +2,7 @@
     A lightweight soft PBX based on Baresip and libre. <br>
     <br>
     The idea to have such software on the hand, has been in my mind for a long time... <br>
-    Having started developing projects such as: tSIP, HATS, I realized that, I don't have a solution that I could use as a basis for operate with VoIP. <br>
+    Started developing projects such as: tSIP, HATS, I realized that, I don't have a solution that I could use as a basis for operate with VoIP. <br>
     Freeswitch was not suitable in this case, since it had to be small, portable and ready for emedding as possible. <br>
     The Baresip (as I usually used it) didn't suit this time. <br>
     So, I decided it was time to write something that would satisfy my needs... <br>
@@ -43,7 +43,7 @@ I've defined the following requirements:
 ### v0.0.1
  This is an experimental version, for testing purposes only. <br>
  Implemented capabilities: <br> 
-  - SIP registrar <br>
+  - SIP registrar and location <br>
   - SIP gateways <br>  
   - Inbound/Outbound/Intrecom calls <br>
   - Dialplan with applications <br>
