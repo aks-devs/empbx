@@ -50,7 +50,8 @@ typedef struct {
 
 typedef struct {
     char        *name;
-    char        *dst_number;
+    char        *field;
+    char        *expr;
     char        *app_name;
     char        *app_data;
 } empbx_dialplan_rule_t;

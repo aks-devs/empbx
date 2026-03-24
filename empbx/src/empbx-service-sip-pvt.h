@@ -11,6 +11,7 @@
 #define REG_DEFAULT_LIFETIME_SEC    300 // 5min
 #define AUTH_NONCE_LIFETIME_SEC     300
 #define AUTH_NONCE_LMIN_LEN         30
+#define SESS_DTMF_QUEUE_SIZE        128
 
 
 #define HC_NORMAL_CLEARING          "NORMAL_CLEARING"

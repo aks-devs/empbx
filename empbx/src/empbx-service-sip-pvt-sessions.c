@@ -32,6 +32,7 @@ static void destructor__empbx_session_t(void *arg) {
     mem_deref(obj->legb_aor);
     mem_deref(obj->lega_aor);
     mem_deref(obj->lega_contact);
+    mem_deref(obj->dtmfq);
     mem_deref(obj->mutex);
 
     log_debug("session deleted (%p)", obj);
@@ -100,6 +101,9 @@ empbx_status_t empbx_session_inbound_new(empbx_session_t **nsess, call_t *lega, 
         mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
     }
     if(mutex_alloc(&sess->mutex) != LIBRE_SUCCESS) {
+        mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
+    }
+    if(empbx_queue_create(&sess->dtmfq, SESS_DTMF_QUEUE_SIZE) != EMPBX_STATUS_SUCCESS) {
         mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
     }
 
@@ -173,6 +177,9 @@ empbx_status_t empbx_session_intercom_new(empbx_session_t **nsess, call_t *lega,
     if(mutex_alloc(&sess->mutex) != LIBRE_SUCCESS) {
         mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
     }
+    if(empbx_queue_create(&sess->dtmfq, SESS_DTMF_QUEUE_SIZE) != EMPBX_STATUS_SUCCESS) {
+        mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
+    }
 
     sess->refs = 0;
     sess->type = EMPBX_SESS_INTERCOM;
@@ -242,6 +249,9 @@ empbx_status_t empbx_session_outbound_new(empbx_session_t **nsess, call_t *lega,
         mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
     }
     if(mutex_alloc(&sess->mutex) != LIBRE_SUCCESS) {
+        mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
+    }
+    if(empbx_queue_create(&sess->dtmfq, SESS_DTMF_QUEUE_SIZE) != EMPBX_STATUS_SUCCESS) {
         mem_fail_goto_status(EMPBX_STATUS_MEM_FAIL, out);
     }
 

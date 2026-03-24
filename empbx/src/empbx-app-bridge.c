@@ -9,9 +9,14 @@ static void session_handler_dtmf(call_t *call, char key, void *arg) {
     empbx_session_t *sess = (empbx_session_t *)arg;
     call_t *call2 = (sess->lega == call ? sess->legb : sess->lega);
 
-    log_debug("SESSION-DTMF-EVENT: session=[%s], call=%p, call2=%p, key=[%c]", sess->id, call, call2, key ? key : '.');
-
-    call_send_digit(call2, key);
+    if((key >= '0' && key <= '9') || (key >= 'A' && key <= 'F') || key == '*' || key == '#') {
+        if(sess->type == EMPBX_SESS_INTERCOM || (sess->type == EMPBX_SESS_INBOUND && call == sess->legb) || (sess->type == EMPBX_SESS_OUTBOUND && call == sess->lega)) {
+            char digits[2] = {key, 0x0};
+            if(!empbx_queue_is_full(sess->dtmfq)) {
+                empbx_queue_push(sess->dtmfq, empbx_strndup(digits, 2));
+            }
+        }
+    }
 }
 
 static void session_handler_call_events(call_t *call, enum call_event ev, const char *str, void *arg) {

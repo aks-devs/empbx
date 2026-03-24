@@ -293,7 +293,8 @@ static void ua_bsevent_handler(enum bevent_ev ev, struct bevent *event, void *ar
 
             if(xuserd->type == EMPBX_XUD_GATEWAY) { /* call from gateway */
                 empbx_registration_gateway_t *from_gw = (empbx_registration_gateway_t *)xuserd->data;
-                empbx_dialplan_lookup_result_t dpresult = {0};
+                empbx_dialplan_lookup_result_t lpresult = {0};
+                empbx_dialplan_lookup_prams_t lparams = {0};
                 empbx_dialplan_app_t *application = NULL;
                 const char *dst_aor = call_localuri(call);
                 char dst_number[64] = {0};
@@ -304,30 +305,34 @@ static void ua_bsevent_handler(enum bevent_ev ev, struct bevent *event, void *ar
                     break;
                 }
 
-                if(empbx_dialplan_lookup(&dpresult, dst_number) == EMPBX_STATUS_SUCCESS) {
+                lparams.gateway =  from_gw->gw_name;
+                lparams.dst_number = dst_number;
+
+                if(empbx_dialplan_lookup(&lpresult, &lparams) == EMPBX_STATUS_SUCCESS) {
                     empbx_dialplan_app_t *application = NULL;
 
-                    if(!zstr(dpresult.rule->app_name)) {
-                        application = empbx_dialplan_application_lookup(dpresult.rule->app_name);
+                    if(!zstr(lpresult.rule->app_name)) {
+                        application = empbx_dialplan_application_lookup(lpresult.rule->app_name);
                     }
 
                     if(application) {
-                        if(application->perform_h(uua, call, dpresult.dst_number) != EMPBX_STATUS_SUCCESS) {
+                        if(application->perform_h(uua, call, lpresult.dst_number) != EMPBX_STATUS_SUCCESS) {
                             call_hangup(call, 500, HC_NORMAL_FALURE);
                         }
                         empbx_dialplan_application_release(application);
                     } else {
-                        log_error("Unknown application (%s)", dpresult.rule->app_name ? dpresult.rule->app_name : "null");
+                        log_error("Unknown application (%s)", lpresult.rule->app_name ? lpresult.rule->app_name : "null");
                         call_hangup(call, 500, HC_NORMAL_FALURE);
                     }
 
-                    mem_deref(dpresult.dst_number);
+                    mem_deref(lpresult.dst_number);
                 } else {
                     call_hangup(call, 404, HC_NO_ROUTE_DESTINATION);
                 }
             } else if(xuserd->type == EMPBX_XUD_USER) { /* call from user */
                 empbx_registration_user_t *from_user = (empbx_registration_user_t *)xuserd->data;
-                empbx_dialplan_lookup_result_t dpresult = {0};
+                empbx_dialplan_lookup_result_t lpresult = {0};
+                empbx_dialplan_lookup_prams_t lparams = {0};
                 char dst_number[64] = {0};
                 const char *dst_aor = call_localuri(call);
 
@@ -337,24 +342,26 @@ static void ua_bsevent_handler(enum bevent_ev ev, struct bevent *event, void *ar
                     break;
                 }
 
-                if(empbx_dialplan_lookup(&dpresult, dst_number) == EMPBX_STATUS_SUCCESS) {
+                lparams.dst_number = dst_number;
+
+                if(empbx_dialplan_lookup(&lpresult, &lparams) == EMPBX_STATUS_SUCCESS) {
                     empbx_dialplan_app_t *application = NULL;
 
-                    if(!zstr(dpresult.rule->app_name)) {
-                        application = empbx_dialplan_application_lookup(dpresult.rule->app_name);
+                    if(!zstr(lpresult.rule->app_name)) {
+                        application = empbx_dialplan_application_lookup(lpresult.rule->app_name);
                     }
 
                     if(application) {
-                        if(application->perform_h(uua, call, dpresult.dst_number) != EMPBX_STATUS_SUCCESS) {
+                        if(application->perform_h(uua, call, lpresult.dst_number) != EMPBX_STATUS_SUCCESS) {
                             call_hangup(call, 500, HC_NORMAL_FALURE);
                         }
                         empbx_dialplan_application_release(application);
                     } else {
-                        log_error("Unknown application (%s)", dpresult.rule->app_name ? dpresult.rule->app_name : "null");
+                        log_error("Unknown application (%s)", lpresult.rule->app_name ? lpresult.rule->app_name : "null");
                         call_hangup(call, 500, HC_NORMAL_FALURE);
                     }
 
-                    mem_deref(dpresult.dst_number);
+                    mem_deref(lpresult.dst_number);
                 } else {
                     call_hangup(call, 404, HC_NO_ROUTE_DESTINATION);
                 }

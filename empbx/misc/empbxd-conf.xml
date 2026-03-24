@@ -27,9 +27,9 @@
         </gateways>
 
         <dialplan>
-            <rule name="pstn-in" dst-number="1019" app="bridge" data="user/1001" />
-            <rule name="pstn-out" dst-number="^(1234567)$" app="bridge" data="gateway/pstn/$1" />
-            <rule name="intercom" dst-number="/^(10[01][0-9])$/" app="bridge" data="user/$1" />
+	    <rule name="pstn-in"  field="dst-number" expression="1019" app="bridge" data="user/1001" />
+            <rule name="pstn-out" field="dst-number" expression="^(1234567)$" app="bridge" data="gateway/pstn/$1" />
+            <rule name="intercom" field="dst-number" expression="/^(10[01][0-9])$/" app="bridge" data="user/$1" />
         </dialplan>
 
         <settings>

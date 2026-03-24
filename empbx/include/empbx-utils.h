@@ -29,4 +29,7 @@ void empbx_thread_finished();
 uint32_t empbx_time_epoch_now();
 uint64_t empbx_time_micro_now();
 
+/* str */
+char *empbx_strndup(char *src, size_t sz);
+
 #endif

@@ -56,7 +56,8 @@ static void destructor__empbx_dialplan_rule_t(void *arg) {
     empbx_dialplan_rule_t *ptr = (empbx_dialplan_rule_t *)arg;
 
     mem_deref(ptr->name);
-    mem_deref(ptr->dst_number);
+    mem_deref(ptr->field);
+    mem_deref(ptr->expr);
     mem_deref(ptr->app_name);
     mem_deref(ptr->app_data);
 }
@@ -283,12 +284,13 @@ empbx_status_t empbx_load_config(const char *fname) {
         if((xdialplan = ezxml_child(xelem, "dialplan")) != NULL) {
             for(ezxml_t xrule = ezxml_child(xdialplan, "rule"); xrule; xrule = xrule->next) {
                 const char *name = ezxml_attr(xrule, "name");
-                const char *dst_num = ezxml_attr(xrule, "dst-number");
+                const char *field = ezxml_attr(xrule, "field");
+                const char *expr = ezxml_attr(xrule, "expression");
                 const char *app_name = ezxml_attr(xrule, "app");
                 const char *app_data = ezxml_attr(xrule, "data");
                 empbx_dialplan_rule_t *rule = NULL;
 
-                if(zstr(name) || zstr(dst_num) || zstr(app_name)) {
+                if(zstr(name) || zstr(field) || zstr(app_name)) {
                     continue;
                 }
 
@@ -298,7 +300,8 @@ empbx_status_t empbx_load_config(const char *fname) {
                 }
 
                 str_dup(&rule->name, name);
-                str_dup(&rule->dst_number, dst_num);
+                str_dup(&rule->field, field);
+                str_dup(&rule->expr, expr);
                 str_dup(&rule->app_name, app_name);
                 str_dup(&rule->app_data, app_data);
 

@@ -41,6 +41,7 @@ typedef struct {
 
 typedef struct {
     mutex_t                 *mutex;
+    empbx_queue_t           *dtmfq;
     call_t                  *lega;
     call_t                  *legb;
     char                    *id;
@@ -82,6 +83,13 @@ typedef struct {
     char                    *dst_number;    // real distination
 } empbx_dialplan_lookup_result_t;
 
+typedef struct {
+    const char      *dst_number;
+    const char      *caller_id_name;
+    const char      *caller_id_number;
+    const char      *gateway;
+} empbx_dialplan_lookup_prams_t;
+
 
 /* service-sip */
 empbx_status_t empbx_service_sip_start();
@@ -104,7 +112,7 @@ bool empbx_session_take(empbx_session_t *sess);
 void empbx_session_release(empbx_session_t *sess);
 
 /* dialplan */
-empbx_status_t empbx_dialplan_lookup(empbx_dialplan_lookup_result_t *result, const char *dst_number);
+empbx_status_t empbx_dialplan_lookup(empbx_dialplan_lookup_result_t *result, empbx_dialplan_lookup_prams_t *lparams);
 
 /* applications */
 empbx_status_t empbx_dialplan_application_register(const char *name, empbx_dialplan_app_unload_h *uh, empbx_dialplan_app_perform_h *ph);

@@ -22,9 +22,6 @@ static void destructor__empbx_registration_user_t(void *arg) {
             sys_msleep(250);
         }
     }
-    /* NOTE:
-     * don;t touch ua cause it'll be removed by baresip!
-     */
 
     mem_deref(obj->user_id);
     mem_deref(obj->realm);
