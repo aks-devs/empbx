@@ -42,6 +42,7 @@ I've defined the following requirements:
 	
 ### v0.0.1
  This is an experimental version, for testing purposes only. <br>
+ Actually, it's a b2bua client with extra features. <br>
  Implemented capabilities: <br> 
   - SIP registrar and location <br>
   - SIP gateways <br>  
